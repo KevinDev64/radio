@@ -17,4 +17,4 @@ while 1:
     data = str.encode("Hello, World!")
     ser.write(data)
     print("I sent!")
-    time.sleep(1);
+    time.sleep(3);
