@@ -2,6 +2,7 @@
 
 import time 
 import serial
+import button
 
 ser = serial.Serial(
     port='/dev/ttyAMA0',
@@ -13,8 +14,12 @@ ser = serial.Serial(
 )
 counter = 0
 
-while 1:
+if button.is_pressed(23):
     data = str.encode("Hello, World!")
     ser.write(data)
     print("I sent!")
     time.sleep(3)
+
+else:
+    x = ser.readline()
+    print(x)
