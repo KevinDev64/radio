@@ -22,4 +22,4 @@ while 1:
 
     else:
         x = ser.readline()
-        print(x)
+        print(x)    
