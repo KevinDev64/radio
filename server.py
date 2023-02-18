@@ -16,5 +16,5 @@ with open("output.bin", "rb") as file:
         print("I sent -> ", string)
         ser.write(string)
 
-ser.write(b'EOF')
+ser.write(b'\nEOF')
         
