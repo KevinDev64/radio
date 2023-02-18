@@ -11,5 +11,7 @@ ser = serial.Serial(
 )
 input("Ready! Press enter to continue!")
 with open("sometext.txt", "wb") as file:
-    data = ser.readline()
-    file.write(data + b"\n")
+    while True:
+        data = ser.readline()
+        print("OHH! I recieved ->", data)
+        file.write(data + b"\n")
