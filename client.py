@@ -9,11 +9,8 @@ ser = serial.Serial(
     bytesize=serial.EIGHTBITS,
     timeout = 10
 )
-ser.write(b'"<<SENDFILE>>\n"') #tell server we are ready to recieve
-readline = lambda : iter(lambda:ser.read(1),"\n")
-with open("sometext.txt","wb") as outfile:
-   while True:
-       line = "".join(readline())
-       if line == "<<EOF>>":
-           break #done so stop accumulating lines
-       print >> outfile,line
+input("Ready! Press enter to continue!")
+with open("sometext.txt", "wb") as file:
+    data_byte = ser.readline()
+    data = data_byte.decode()
+    file.write(data + "\n")
