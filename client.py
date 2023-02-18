@@ -12,4 +12,4 @@ ser = serial.Serial(
 input("Ready! Press enter to continue!")
 with open("sometext.txt", "wb") as file:
     data = ser.readline()
-    file.write(data + "\n")
+    file.write(data + b"\n")
