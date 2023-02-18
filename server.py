@@ -10,7 +10,7 @@ ser = serial.Serial(
     timeout = 10
 )
 input("Ready! Press enter to continue!")
-with open("sometext.txt", "rb") as file:
+with open("output.bin", "rb") as file:
     data = file.readlines()
     for string in data:
         print("I sent -> ", string)

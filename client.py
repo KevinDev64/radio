@@ -10,7 +10,7 @@ ser = serial.Serial(
     timeout = 10
 )
 input("Ready! Press enter to continue!")
-with open("sometext.txt", "wb") as file:
+with open("output.bin", "wb") as file:
     while True:
         data = ser.readline()
         if data == b'EOF':
