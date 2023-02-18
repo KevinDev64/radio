@@ -14,6 +14,5 @@ with open("sometext.txt", "rb") as file:
     data = file.readlines()
     for string in data:
         print("I sent -> ", string)
-        data_byte = string.encode()
-        ser.write(data_byte)
+        ser.write(string)
         
