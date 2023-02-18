@@ -15,4 +15,6 @@ with open("sometext.txt", "rb") as file:
     for string in data:
         print("I sent -> ", string)
         ser.write(string)
+
+ser.write(b'EOF')
         

@@ -13,5 +13,10 @@ input("Ready! Press enter to continue!")
 with open("sometext.txt", "wb") as file:
     while True:
         data = ser.readline()
-        print("OHH! I recieved ->", data)
-        file.write(data + b"\n")
+        if data != b'':
+            print("OHH! I recieved ->", data)
+            file.write(data)
+        elif data == b'EOF':
+            break
+        else:
+            pass
