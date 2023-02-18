@@ -1,6 +1,6 @@
 #!/bin/python3
 
-from serial import Serial
+import serial
 ser = serial.Serial(
     port='/dev/ttyAMA0',
     baudrate = 38400,
