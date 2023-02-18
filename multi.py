@@ -9,8 +9,7 @@ ser = serial.Serial(
     baudrate = 38400,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
-    bytesize=serial.EIGHTBITS,
-    timeout=1
+    bytesize=serial.EIGHTBITS
 )
 counter = 0
 while 1:
