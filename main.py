@@ -10,14 +10,17 @@
 6) Если надо принимаем.
 """
 
+# Подключаем библиотеки
 import time
 import serial
 import button
 import os
 from systemd.daemon import notify, Notification
 
-stop_var = False
-send = False
+stop_var = False     # Переменная остановки залипания кнопки
+send = False         # Переменная состояния отправки
+
+# Инициализируем SerialPort
 
 ser = serial.Serial(
     port='/dev/ttyAMA0',
@@ -27,55 +30,61 @@ ser = serial.Serial(
     bytesize=serial.EIGHTBITS,
     timeout = 10
 )
+
+# Функция отправки
 def send_file():
     with open("record.bin", "rb") as file:
-        data = file.readlines()
-        for string in data:
-            ser.write(string)
-    ser.write(b'\nEOF')
-    
+        data = file.readlines()                  # Читаем строки в файле и записываем как список в переменную
+        for string in data:                      # Перебираем строки в списке
+            ser.write(string)                    # Отправляем строку
+    ser.write(b'\nEOF')                          # Когда передача завершена, отправляем EOF (конец передачи)
+  
+# Функция получения  
 def recieve_file():
-    with open("sound.bin", "wb") as file:
-        while True:
-            data = ser.readline()
-            if data == b'EOF':
+    with open("sound.bin", "wb") as file:        # Открываем файл на запись
+        while True:                              # Уходим в вечный цикл приёма
+            data = ser.readline()                # Читаем строку из эфира и записываем в переменную
+            if data == b'EOF':                   # Если получили EOF, то возвращаем ИСТИНУ (т.к. приём файл прошёл успешно)
                 return True
                 break
-            elif data != b'':
+            elif data != b'':                    # Если строка не пустая и не равна EOF, то пишем эту строку в файл
                 print("OHH! I recieved ->", data)
                 file.write(data)
-            else:
+            else:                                # Иначе (строка пустая) возвращаем ЛОЖЬ (т.к. мы ничего не приняли)
                 return False
                 break
             
     
     
-notify(Notification.READY) # Notify READY state!
+notify(Notification.READY) # Уведомляем systemd, что всё хорошо
 
+# Главный цикл программы
 while True:
     if button.is_pressed(23):
         if stop_var == False and send == False:
-            stop_var = True
-            send = True
+            stop_var = True   # Запрещаем залипание
+            send = True       # Т.к. мы отправляем файл, меняем переменную
             
-            os.system("arecord -f S16_LE -r 44100 -t raw record.raw")
+            os.system("arecord -f S16_LE -r 44100 -t raw record.raw")  # Запись файла
         else:
             pass
-    if not(button.is_pressed(23)) and send == True:
-        os.system("killall -s 9 arecord")
-        os.system("c2enc 1300 record.raw record.bin")
-        os.remove("record.raw")
         
-        send_file()
-        send = False
-        stop_var = False
+    if not(button.is_pressed(23)) and send == True:
+        os.system("killall -s 9 arecord")    # Останавливаем запись, если кнопка была отпущена и мы в это время отправляли
+        os.system("c2enc 1300 record.raw record.bin") # Кодируем файл
+        os.remove("record.raw")  # Удаляем оригинальную запись
+        
+        send_file()              # Отправляем файл
+        send = False             # После отправки меняем переменную, т.к. передача завершена
+        stop_var = False         # Разрешаем нажимать кнопку
+        
     if not(button.is_pressed(23)) and send == False:
-        if not(recieve_file()):
+        if not(recieve_file()):  # Если ничего нет в эфире, то пропускаем
             pass
-        else:
-            os.system("c2dec 1300 sound.bin sound.raw")
-            os.remove("sound.bin")
-            os.system("aplay -f S16_LE -r 44100 -t raw sound.raw")
-            os.remove("sound.raw")
+        else:                    # Как только появились данные после приёма, сразу декодируем их и воспроизводим
+            os.system("c2dec 1300 sound.bin sound.raw")   # Декодируем
+            os.remove("sound.bin")                        # Удаляем закодированный файл
+            os.system("aplay -f S16_LE -r 44100 -t raw sound.raw")  # Воспроизводим декодированный файл
+            os.remove("sound.raw")                                  # Удаляем декодированный файл
         
 
