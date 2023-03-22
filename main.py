@@ -23,6 +23,7 @@ ser = serial.Serial(
 
 # Функция отправки
 def send_file():
+    print("I sending...")
     with open("record.bin", "rb") as file:
         data = file.readlines()                  # Читаем строки в файле и записываем как список в переменную
         for string in data:                      # Перебираем строки в списке
@@ -31,6 +32,7 @@ def send_file():
   
 # Функция получения  
 def recieve_file():
+    print("I receving...")
     with open("sound.bin", "wb") as file:        # Открываем файл на запись
         while True:                              # Уходим в вечный цикл приёма
             data = ser.readline()                # Читаем строку из эфира и записываем в переменную
@@ -51,6 +53,7 @@ notify(Notification.READY) # Уведомляем systemd, что всё хор�
 # Главный цикл программы
 while True:
     if button.is_pressed(23):
+        print("Pressed!")
         if stop_var == False and send == False:
             stop_var = True   # Запрещаем залипание
             send = True       # Т.к. мы отправляем файл, меняем переменную
@@ -60,6 +63,7 @@ while True:
             pass
         
     if not(button.is_pressed(23)) and send == True:
+        print("Button not pressed! Sending...!")
         os.system("killall -s 9 arecord")    # Останавливаем запись, если кнопка была отпущена и мы в это время отправляли
         os.system("c2enc 1300 record.raw record.bin") # Кодируем файл
         os.remove("record.raw")  # Удаляем оригинальную запись
