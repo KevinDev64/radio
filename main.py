@@ -18,7 +18,7 @@ ser = serial.Serial(
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
     bytesize=serial.EIGHTBITS,
-    timeout = 10
+    timeout = 1
 )
 
 # Функция отправки
