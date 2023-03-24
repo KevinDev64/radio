@@ -70,6 +70,9 @@ while True:
         os.remove("record.raw")  # Удаляем оригинальную запись
         
         send_file()              # Отправляем файл
+        
+        os.remove("record.bin")
+        
         send = False             # После отправки меняем переменную, т.к. передача завершена
         stop_var = False         # Разрешаем нажимать кнопку
         
