@@ -5,6 +5,7 @@ import time
 import serial
 import button
 import os
+import subprocess
 from systemd.daemon import notify, Notification
 
 stop_var = False     # Переменная остановки залипания кнопки
@@ -59,7 +60,8 @@ while True:
             stop_var = True   # Запрещаем залипание
             send = True       # Т.к. мы отправляем файл, меняем переменную
             
-            os.system("arecord -D sysdefault:CARD=Device -f S16_LE -r 44100 -t raw record.raw")  # Запись файла
+            # os.system("arecord -D sysdefault:CARD=Device -f S16_LE -r 44100 -t raw record.raw")  # Запись файла
+            subprocess.Popen("arecord -D sysdefault:CARD=Device -f S16_LE -r 44100 -t raw record.raw")
         else:
             pass
         
