@@ -60,14 +60,14 @@ while True:
             stop_var = True   # Запрещаем залипание
             send = True       # Т.к. мы отправляем файл, меняем переменную
             
-            subprocess.Popen(["/bin/arecord", "-D", "plughw:CARD=Device,DEV=0", "-f", "S32_LE", "-r" "48000", "-t", "raw", "record.raw"])   # Запись файла
+            subprocess.Popen(["/bin/arecord", "-D", "plughw:CARD=Device,DEV=0", "-f", "S16_LE", "-r" "48000", "-t", "raw", "record.raw"])   # Запись файла
         else:
             pass
         
     if not(button.is_pressed(23)) and send == True:
         print("Button not pressed! Sending...!")
         os.system("killall -s 9 arecord")    # Останавливаем запись, если кнопка была отпущена и мы в это время отправляли
-        os.system("c2enc 1300 record.raw record.bin") # Кодируем файл
+        os.system("c2enc 3200 record.raw record.bin") # Кодируем файл
         os.remove("record.raw")  # Удаляем оригинальную запись
         
         send_file()              # Отправляем файл
@@ -81,9 +81,9 @@ while True:
         if not(recieve_file()):  # Если ничего нет в эфире, то пропускаем
             pass
         else:                    # Как только появились данные после приёма, сразу декодируем их и воспроизводим
-            os.system("c2dec 1300 sound.bin sound.raw")   # Декодируем
+            os.system("c2dec 3200 sound.bin sound.raw")   # Декодируем
             os.remove("sound.bin")                        # Удаляем закодированный файл
-            os.system("aplay -D plughw:CARD=Device,DEV=0 -f S32_LE -r 48000 -t raw sound.raw")  # Воспроизводим декодированный файл
+            os.system("aplay -D plughw:CARD=Device,DEV=0 -f S16_LE -r 48000 -t raw sound.raw")  # Воспроизводим декодированный файл
             os.remove("sound.raw")                                  # Удаляем декодированный файл
         
 
