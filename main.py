@@ -83,7 +83,7 @@ while True:
         else:                    # Как только появились данные после приёма, сразу декодируем их и воспроизводим
             os.system("c2dec 1300 sound.bin sound.raw")   # Декодируем
             os.remove("sound.bin")                        # Удаляем закодированный файл
-            os.system("aplay -D plughw:CARD=Device,DEV=0 -f S16_LE -r 44100 -t raw sound.raw")  # Воспроизводим декодированный файл
+            os.system("aplay -D plughw:CARD=Device,DEV=0 -f S16_LE -r 48000 -t raw sound.raw")  # Воспроизводим декодированный файл
             os.remove("sound.raw")                                  # Удаляем декодированный файл
         
 
