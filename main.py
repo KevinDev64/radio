@@ -53,8 +53,9 @@ notify(Notification.READY) # Уведомляем systemd, что всё хор�
 # Главный цикл программы
 while True:
     if button.is_pressed(23):
-        print("Pressed!")
+        
         if stop_var == False and send == False:
+            print("Pressed!")
             stop_var = True   # Запрещаем залипание
             send = True       # Т.к. мы отправляем файл, меняем переменную
             
