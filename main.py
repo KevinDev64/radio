@@ -61,7 +61,7 @@ while True:
             send = True       # Т.к. мы отправляем файл, меняем переменную
             
             # os.system("arecord -D sysdefault:CARD=Device -f S16_LE -r 44100 -t raw record.raw")  # Запись файла
-            subprocess.Popen("/bin/arecord -D sysdefault:CARD=Device -f S16_LE -r 44100 -t raw record.raw")
+            subprocess.Popen(["/bin/arecord", "-D", "sysdefault:CARD=Device", "-f", "S16_LE", "-r" "44100", "-t", "raw", "record.raw"])
         else:
             pass
         
