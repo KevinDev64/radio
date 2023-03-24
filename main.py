@@ -60,8 +60,7 @@ while True:
             stop_var = True   # Запрещаем залипание
             send = True       # Т.к. мы отправляем файл, меняем переменную
             
-            # os.system("arecord -D sysdefault:CARD=Device -f S16_LE -r 44100 -t raw record.raw")  # Запись файла
-            subprocess.Popen(["/bin/arecord", "-D", "hw:CARD=Device,DEV=0", "-f", "S16_LE", "-r" "44100", "-t", "raw", "record.raw"])
+            subprocess.Popen(["/bin/arecord", "-D", "plughw:CARD=Device,DEV=0", "-f", "S16_LE", "-r" "48000", "-t", "raw", "record.raw"])   # Запись файла
         else:
             pass
         
@@ -69,11 +68,11 @@ while True:
         print("Button not pressed! Sending...!")
         os.system("killall -s 9 arecord")    # Останавливаем запись, если кнопка была отпущена и мы в это время отправляли
         os.system("c2enc 1300 record.raw record.bin") # Кодируем файл
-        # os.remove("record.raw")  # Удаляем оригинальную запись
+        os.remove("record.raw")  # Удаляем оригинальную запись
         
         send_file()              # Отправляем файл
         
-        # os.remove("record.bin")
+        os.remove("record.bin")
         
         send = False             # После отправки меняем переменную, т.к. передача завершена
         stop_var = False         # Разрешаем нажимать кнопку
@@ -83,8 +82,8 @@ while True:
             pass
         else:                    # Как только появились данные после приёма, сразу декодируем их и воспроизводим
             os.system("c2dec 1300 sound.bin sound.raw")   # Декодируем
-            # os.remove("sound.bin")                        # Удаляем закодированный файл
-            os.system("aplay -D hw:CARD=Device,DEV=0 -f S16_LE -r 44100 -t raw sound.raw")  # Воспроизводим декодированный файл
-            # os.remove("sound.raw")                                  # Удаляем декодированный файл
+            os.remove("sound.bin")                        # Удаляем закодированный файл
+            os.system("aplay -D plughw:CARD=Device,DEV=0 -f S16_LE -r 44100 -t raw sound.raw")  # Воспроизводим декодированный файл
+            os.remove("sound.raw")                                  # Удаляем декодированный файл
         
 
