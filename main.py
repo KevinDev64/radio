@@ -61,7 +61,7 @@ while True:
             send = True       # Т.к. мы отправляем файл, меняем переменную
             
             # os.system("arecord -D sysdefault:CARD=Device -f S16_LE -r 44100 -t raw record.raw")  # Запись файла
-            subprocess.Popen(["/bin/arecord", "-D", "sysdefault:CARD=Device", "-f", "S16_LE", "-r" "44100", "-t", "raw", "record.raw"])
+            subprocess.Popen(["/bin/arecord", "-D", "hw:CARD=Device,DEV=0", "-f", "S16_LE", "-r" "44100", "-t", "raw", "record.raw"])
         else:
             pass
         
@@ -84,7 +84,7 @@ while True:
         else:                    # Как только появились данные после приёма, сразу декодируем их и воспроизводим
             os.system("c2dec 1300 sound.bin sound.raw")   # Декодируем
             os.remove("sound.bin")                        # Удаляем закодированный файл
-            os.system("aplay -D sysdefault:CARD=Device -f S16_LE -r 44100 -t raw sound.raw")  # Воспроизводим декодированный файл
+            os.system("aplay -D hw:CARD=Device,DEV=0 -f S16_LE -r 44100 -t raw sound.raw")  # Воспроизводим декодированный файл
             os.remove("sound.raw")                                  # Удаляем декодированный файл
         
 
