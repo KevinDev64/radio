@@ -75,10 +75,10 @@ while True:
         
         send_file()              # Отправляем файл
         
-        try:
-            os.remove("record.bin")
-        except:
-            pass
+        # try:
+        #     os.remove("record.bin")
+        # except:
+        #     pass
         
         send = False             # После отправки меняем переменную, т.к. передача завершена
         stop_var = False         # Разрешаем нажимать кнопку
@@ -88,13 +88,13 @@ while True:
             pass
         else:                    # Как только появились данные после приёма, сразу декодируем их и воспроизводим
             os.system("c2dec 3200 sound.bin sound.raw")   # Декодируем
-            try:
-                os.remove("sound.bin")
-            except:
-                pass                   # Удаляем закодированный файл
+            # try:
+            #     os.remove("sound.bin")
+            # except:
+            #     pass                   # Удаляем закодированный файл
             os.system("aplay -D plughw:CARD=Device,DEV=0 -f S16_LE -r 48000 -t raw sound.raw")  # Воспроизводим декодированный файл
-            try:
-                os.remove("sound.raw")                                  # Удаляем декодированный файл
-            except:
-                pass
+            # try:
+            #     os.remove("sound.raw")                                  # Удаляем декодированный файл
+            # except:
+            #     pass
 
