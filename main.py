@@ -69,12 +69,12 @@ while True:
         os.system("killall -s 9 arecord")    # Останавливаем запись, если кнопка была отпущена и мы в это время отправляли
         os.system("c2enc 3200 record.raw record.bin") # Кодируем файл
         
-        os.remove("record.raw")  # Удаляем оригинальную запись
+        # os.remove("record.raw")  # Удаляем оригинальную запись
         
         
         send_file()              # Отправляем файл
         
-        os.remove("record.bin")
+        # os.remove("record.bin")
         
         send = False             # После отправки меняем переменную, т.к. передача завершена
         stop_var = False         # Разрешаем нажимать кнопку
@@ -85,12 +85,12 @@ while True:
         else:                    # Как только появились данные после приёма, сразу декодируем их и воспроизводим
             os.system("c2dec 3200 sound.bin sound.raw")   # Декодируем
             # try:
-            os.remove("sound.bin")
+            # os.remove("sound.bin")
             # except:
             #     pass                   # Удаляем закодированный файл
             os.system("aplay -D plughw:CARD=Device,DEV=0 -f S16_LE -r 48000 -t raw sound.raw")  # Воспроизводим декодированный файл
             # try:
-            os.remove("sound.raw")                                  # Удаляем декодированный файл
+            # os.remove("sound.raw")                                  # Удаляем декодированный файл
             # except:
             #     pass
 
