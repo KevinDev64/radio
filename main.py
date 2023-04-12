@@ -93,4 +93,6 @@ while True:
             # os.remove("sound.raw")                                  # Удаляем декодированный файл
             # except:
             #     pass
+            
+
 
