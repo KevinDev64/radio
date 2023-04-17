@@ -25,7 +25,7 @@ ser = serial.Serial(
 # Функция отправки
 def send_file():
     print("I sending...")
-    with open("record.bin", "rb") as file:
+    with open("rec.bin", "rb") as file:
         data = file.readlines()                  # Читаем строки в файле и записываем как список в переменную
         for string in data:                      # Перебираем строки в списке
             ser.write(string)                    # Отправляем строку
@@ -34,7 +34,7 @@ def send_file():
 # Функция получения  
 def recieve_file():
     print("I receving...")
-    with open("sound.bin", "wb") as file:        # Открываем файл на запись
+    with open("temp.bin", "wb") as file:        # Открываем файл на запись
         while True:                              # Уходим в вечный цикл приёма
             data = ser.readline()                # Читаем строку из эфира и записываем в переменную
             if data == b'EOF':                   # Если получили EOF, то возвращаем ИСТИНУ (т.к. приём файл прошёл успешно)
@@ -60,14 +60,14 @@ while True:
             stop_var = True   # Запрещаем залипание
             send = True       # Т.к. мы отправляем файл, меняем переменную
             
-            subprocess.Popen(["/bin/arecord", "-D", "plughw:CARD=Device,DEV=0", "-f", "S16_LE", "-r" "48000", "-t", "raw", "record.raw"])   # Запись файла
+            # subprocess.Popen(["/bin/arecord", "-D", "plughw:CARD=Device,DEV=0", "-f", "S16_LE", "-r" "48000", "-t", "raw", "record.raw"])   # Запись файла
         else:
             pass
         
     if not(button.is_pressed(23)) and send == True:
         print("Button not pressed! Sending...!")
-        os.system("killall -s 9 arecord")    # Останавливаем запись, если кнопка была отпущена и мы в это время отправляли
-        os.system("c2enc 3200 record.raw record.bin") # Кодируем файл
+        #os.system("killall -s 9 arecord")    # Останавливаем запись, если кнопка была отпущена и мы в это время отправляли
+        #os.system("c2enc 3200 record.raw record.bin") # Кодируем файл
         
         # os.remove("record.raw")  # Удаляем оригинальную запись
         
@@ -82,13 +82,15 @@ while True:
     if not(button.is_pressed(23)) and send == False:
         if not(recieve_file()):  # Если ничего нет в эфире, то пропускаем
             pass
-        else:                    # Как только появились данные после приёма, сразу декодируем их и воспроизводим
-            os.system("c2dec 3200 sound.bin sound.raw")   # Декодируем
+        else:   
+            pass
+            # Как только появились данные после приёма, сразу декодируем их и воспроизводим
+            # os.system("c2dec 3200 sound.bin sound.raw")   # Декодируем
             # try:
             # os.remove("sound.bin")
             # except:
             #     pass                   # Удаляем закодированный файл
-            os.system("aplay -D plughw:CARD=Device,DEV=0 -f S16_LE -r 48000 -t raw sound.raw")  # Воспроизводим декодированный файл
+            # os.system("aplay -D plughw:CARD=Device,DEV=0 -f S16_LE -r 48000 -t raw sound.raw")  # Воспроизводим декодированный файл
             # try:
             # os.remove("sound.raw")                                  # Удаляем декодированный файл
             # except:
