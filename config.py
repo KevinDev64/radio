@@ -12,9 +12,9 @@ led = 26
 speaker = "plughw:CARD=Device,DEV=0"
 mic = "plughw:CARD=Device,DEV=0" 
 codec2 = 3200
-quality = "-f S16_LE -r 48000"
+alsa_args = "-f S16_LE -r 48000"
 
-elements = [speed, port, parity, stopbits, bytesize, button, led, speaker, mic, codec2, quality]
+elements = [speed, port, parity, stopbits, bytesize, button, led, speaker, mic, codec2, alsa_args]
 try:
     file = open("config", "r")
     data = file.readlines()
@@ -32,7 +32,7 @@ try:
 
 except:
     file = open("config", "w")               
-    data = [speed, port, parity, stopbits, bytesize, button, led, speaker, mic, codec2, quality] 
+    data = [speed, port, parity, stopbits, bytesize, button, led, speaker, mic, codec2, alsa_args] 
     for element in data:
         file.write(str(element))
         file.write("\n")
@@ -53,41 +53,43 @@ while True:
     1. UART Baud Rate
     2. Serial Device File (/dev)
     3. Parity
-    4. Byte Size
+    4. Stop Bits
+    5. Byte Size
 
     ------ GPIO PINS ------
-    5. Button GPIO Pin
-    6. Led GPIO Pin
+    6. Button GPIO Pin
+    7. Led GPIO Pin
 
     -------- SOUND --------
-    7. PCM of Speaker By Name(ALSA)
-    8. PCM of Microphone By Name(ALSA)
-    9. Codec2 bitrate
-    10. Arguments for alsa when recording/playback
+    8. PCM of Speaker By Name(ALSA)
+    9. PCM of Microphone By Name(ALSA)
+    10. Codec2 bitrate
+    11. Arguments for alsa when recording/playback
 
     ------ FUNCTIONS ------
-    11. SAVE CHANGES
-    12. EXIT
+    12. SAVE CHANGES
+    13. EXIT
     """)
     inp = input(">>> ")
+    
     if inp == "1":
         os.system("clear")
-        print("UART BAUD RATE")
+        print("UART Baud Rate")
         print("-" * 20)
-        print("\nRecommended -> 38400")
+        print("\nDefault -> 38400")
         print("NOW -> {}".format(data[0]))
-        uart = input("""Enter a new value(number) or enter "cancel" to cancel >>> """)
-        if uart == "cancel":
+        uart_inp = input("""Enter a new value(number) or enter "cancel" to cancel >>> """)
+        if uart_inp == "cancel":
             os.system("clear")
         else:
             try:
-                uart = int(uart)
+                uart_inp = int(uart_inp)
             except:
                 print("\nERROR: You entered something other than a number!\nPress Enter to continue...")
                 input()
                 os.system("clear")
             else:
-                data[0] = uart
+                data[0] = uart_inp
                 print("\nSUCCESS! Press Enter to continue")
                 input()
                 os.system("clear")
@@ -97,11 +99,11 @@ while True:
         print("Serial Device File (/dev)")
         print("-" * 20)
         print("NOW -> {}".format(data[1]))
-        dev_file = input("""Enter a new value(full path) or enter "cancel" to cancel >>> """)
-        if dev_file == "cancel":
+        dev_file_inp = input("""Enter a new value(full path) or enter "cancel" to cancel >>> """)
+        if dev_file_inp == "cancel":
             os.system("clear")
         else:
-            data[1] = dev_file
+            data[1] = dev_file_inp
             print("\nSUCCESS! Press Enter to continue")
             input()
             os.system("clear")
@@ -117,12 +119,13 @@ while True:
     O. Odd
     M. Mark
     S. Space""")
-        print("\nNOW -> {}".format(data[1]))
-        temp_parity = input("""Enter a new value(letter) or enter "cancel" to cancel >>> """)
-        if temp_parity == "cancel":
+        print("\nDefault -> N")
+        print("\nNOW -> {}".format(data[2]))
+        parity_inp = input("""Enter a new value(letter) or enter "cancel" to cancel >>> """)
+        if parity_inp == "cancel":
             os.system("clear")
-        elif temp_parity in available:
-            data[2] = temp_parity
+        elif parity_inp in available:
+            data[2] = parity_inp
             print("\nSUCCESS! Press Enter to continue")
             input()
             os.system("clear")
@@ -130,3 +133,181 @@ while True:
             print("\nERROR: You entered an invalid value!\nPress Enter to continue...")
             input()
             os.system("clear")
+    
+    if inp == "4":
+        os.system("clear")
+        print("Stop Bits")
+        print("-" * 20)
+        print("\nDefault -> 1")
+        print("NOW -> {}".format(data[3]))
+        stopbits_inp = input("""Enter a new value(number) or enter "cancel" to cancel >>> """)
+        if stopbits_inp == "cancel":
+            os.system("clear")
+        else:
+            try:
+                stopbits_inp = int(stopbits_inp)
+            except:
+                print("\nERROR: You entered something other than a number!\nPress Enter to continue...")
+                input()
+                os.system("clear")
+            else:
+                data[3] = stopbits_inp
+                print("\nSUCCESS! Press Enter to continue")
+                input()
+                os.system("clear")
+                
+    if inp == "5":
+        os.system("clear")
+        print("Byte Size")
+        print("-" * 20)
+        print("\nDefault -> 8")
+        print("NOW -> {}".format(data[4]))
+        bytesize_inp = input("""Enter a new value(number) or enter "cancel" to cancel >>> """)
+        if bytesize_inp == "cancel":
+            os.system("clear")
+        else:
+            try:
+                bytesize_inp = int(bytesize_inp)
+            except:
+                print("\nERROR: You entered something other than a number!\nPress Enter to continue...")
+                input()
+                os.system("clear")
+            else:
+                data[4] = bytesize_inp
+                print("\nSUCCESS! Press Enter to continue")
+                input()
+                os.system("clear")
+                
+    if inp == "6":
+        os.system("clear")
+        print("Button GPIO Pin")
+        print("-" * 20)
+        print("\nDefault -> 23")
+        print("NOW -> {}".format(data[5]))
+        button_pin_inp = input("""Enter a new value(number) or enter "cancel" to cancel >>> """)
+        if button_pin_inp == "cancel":
+            os.system("clear")
+        else:
+            try:
+                button_pin_inp = int(button_pin_inp)
+            except:
+                print("\nERROR: You entered something other than a number!\nPress Enter to continue...")
+                input()
+                os.system("clear")
+            else:
+                data[5] = button_pin_inp
+                print("\nSUCCESS! Press Enter to continue")
+                input()
+                os.system("clear")
+                
+    if inp == "7":
+        os.system("clear")
+        print("LED GPIO Pin")
+        print("-" * 20)
+        print("\nDefault -> 26")
+        print("NOW -> {}".format(data[6]))
+        led_pin_inp = input("""Enter a new value(number) or enter "cancel" to cancel >>> """)
+        if led_pin_inp == "cancel":
+            os.system("clear")
+        else:
+            try:
+                led_pin_inp = int(led_pin_inp)
+            except:
+                print("\nERROR: You entered something other than a number!\nPress Enter to continue...")
+                input()
+                os.system("clear")
+            else:
+                data[6] = led_pin_inp
+                print("\nSUCCESS! Press Enter to continue")
+                input()
+                os.system("clear")
+
+    if inp == "8":
+        os.system("clear")
+        print("PCM of Speaker By Name(ALSA)")
+        print("-" * 20)
+        print("Example -> plughw:CARD=Device,DEV=0")
+        print("NOW -> {}".format(data[7]))
+        speaker_alsa_name_inp = input("""Enter a new value(alsa name) or enter "cancel" to cancel >>> """)
+        if speaker_alsa_name_inp == "cancel":
+            os.system("clear")
+        else:
+            data[7] = speaker_alsa_name_inp
+            print("\nSUCCESS! Press Enter to continue")
+            input()
+            os.system("clear")
+            
+    if inp == "9":
+        os.system("clear")
+        print("PCM of Microphone By Name(ALSA)")
+        print("-" * 20)
+        print("Example -> plughw:CARD=Device,DEV=0")
+        print("NOW -> {}".format(data[8]))
+        mic_alsa_name_inp = input("""Enter a new value(alsa name) or enter "cancel" to cancel >>> """)
+        if mic_alsa_name_inp == "cancel":
+            os.system("clear")
+        else:
+            data[8] = mic_alsa_name_inp
+            print("\nSUCCESS! Press Enter to continue")
+            input()
+            os.system("clear")
+    
+    if inp == "10":
+        available = ['3200', '2400', '1600', '1400', '1300', '1200', '700C', '450', '450PWB']
+        os.system("clear")
+        print("Codec2 Bitrate")
+        print("-" * 20)
+        print("""Available:
+    3200
+    2400
+    1600
+    1400
+    1300
+    1200
+    700C
+    450
+    450PWB""")
+        print("\nDefault -> 3200")
+        print("NOW -> {}".format(data[9]))
+        codec2_bitrate_inp = input("""Enter a new value(bitrate) or enter "cancel" to cancel >>> """)
+        if codec2_bitrate_inp == "cancel":
+            os.system("clear")
+        elif codec2_bitrate_inp in available:
+            data[9] = codec2_bitrate_inp
+            print("\nSUCCESS! Press Enter to continue")
+            input()
+            os.system("clear")
+        else:
+            print("\nERROR: You entered an invalid value!\nPress Enter to continue...")
+            input()
+            os.system("clear")
+            
+    if inp == "11":
+        os.system("clear")
+        print("Arguments for alsa when recording/playback")
+        print("-" * 30)
+        print("NOW -> {}".format(data[10]))
+        alsa_args_inp = input("""Enter a new value(string of args) or enter "cancel" to cancel >>> """)
+        if alsa_args_inp == "cancel":
+            os.system("clear")
+        else:
+            data[10] = alsa_args_inp
+            print("\nSUCCESS! Press Enter to continue")
+            input()
+            os.system("clear")
+    
+    if inp == "12":
+        file = open("config", "w")
+        for element in data:
+            file.write(str(element))
+            file.write("\n")
+        file.close()                
+        print("SUCCESS! Press Enter to continue...")
+        input()
+        
+    if inp == "13":
+        os.system("clear")
+        print("Goodbye!")
+        exit()
+        
+    os.system("clear")
