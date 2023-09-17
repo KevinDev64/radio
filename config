@@ -9,4 +9,4 @@ plughw:CARD=Device,DEV=0
 plughw:CARD=Device,DEV=0
 3200
 -f S16_LE -r 48000
-1234567890qwerty
+qwerty0000
