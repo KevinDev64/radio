@@ -2,6 +2,8 @@
 import serial
 import os
 
+os.system("clear")
+
 speed = 38400
 port = "/dev/ttyAMA0"
 parity = 'N'
@@ -22,7 +24,6 @@ try:
     for i in range(len(data)):
         data[i] = data[i].replace("\n", "")
     file.close()
-    print("READ SUCCESSFULLY!")
     # Translates to normal types
     data[0] = int(data[0]) # speed
     data[3] = int(data[3]) # stop bits
@@ -38,16 +39,16 @@ except:
         file.write(str(element))
         file.write("\n")
     file.close()                
-    print("WRITE SUCCESSFULLY!")
     
-print("|-----------------------------------------------------------|")
-print("|Welcome to the application for configuring device settings!|")
-print("|                                                           |")
-print("|   Only change something if you know what you are doing!   |")
-print("|                                                           |")
-print("|                     Made by KevinDev64                    |")
-print("|-----------------------------------------------------------|")
+
 while True:
+    print("|-----------------------------------------------------------|")
+    print("|Welcome to the application for configuring device settings!|")
+    print("|                                                           |")
+    print("|   Only change something if you know what you are doing!   |")
+    print("|                                                           |")
+    print("|                     Made by KevinDev64                    |")
+    print("|-----------------------------------------------------------|")
     print("\nSelect action (enter a number)")
     print("""
     ----- CONNECTION ------
@@ -320,8 +321,17 @@ At the same time, a simple key exposes your data to hacking.""")
             os.system("clear")
         
     if inp == "13":
-        # UPDATE SOFTWARE
-        pass
+        os.system("clear")
+        print("Update Software")
+        print("-" * 20)
+        print("WARNING! You MUST be connected to the Internet!\nSave all data before updating!")
+        update_inp = input("\nAre you sure? (y/n) >> ")
+        if update_inp == "y":
+            os.system("clear")
+            print("UPDATING...")  # skeleton
+            input()
+        if update_inp == "n":
+            os.system("clear")
     
     if inp == "14":
         file = open("config", "w")
