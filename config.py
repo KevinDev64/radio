@@ -325,6 +325,7 @@ At the same time, a simple key exposes your data to hacking.""")
         print("Update Software")
         print("-" * 20)
         print("WARNING! You MUST be connected to the Internet!\nSave all data before updating!")
+        print("Check the instruction booklet before updating!")
         update_inp = input("\nAre you sure? (y/n) >> ")
         if update_inp == "y":
             os.system("clear")
