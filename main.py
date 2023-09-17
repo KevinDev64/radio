@@ -2,10 +2,10 @@
 
 import time
 import serial
-import button
+import pin
 import os
 import subprocess
-from systemd.daemon import notify, Notification
+from systemd.daemon import notify
 
 stop_var = False     # button flag
 send = False         # status of sending
@@ -27,8 +27,15 @@ try:
     data[9] = int(data[9]) # codec2 arg
 
 except:
-    # throw error with led
-    pass             
+    # config error
+    pin.power_off(data[6])
+    time.sleep(1)
+    for _ in range(5):
+        pin.power_on(data[6])
+        time.sleep(0.5)    
+        pin.power_off(data[6])
+        time.sleep(0.5)
+    
     
 else:
     # initialize serial
@@ -45,31 +52,31 @@ else:
     def send_file():
         print("I sending...")
         with open("record.gpg", "rb") as file:
-            data = file.readlines()                  # Читаем строки в файле и записываем как список в переменную
-            for string in data:                      # Перебираем строки в списке
-                ser.write(string)                    # Отправляем строку
-        ser.write(b'\nEOF')                          # Когда передача завершена, отправляем EOF (конец передачи)
+            data = file.readlines()                  # read lines and write into list
+            for string in data:                      # select every element in list
+                ser.write(string)                    # send string (element)
+        ser.write(b'\nEOF')                          # if sending is completed, throw EOF (end of file)
     
     # recieve function 
     def recieve_file():
         print("I receving...")
-        with open("sound.gpg", "wb") as file:        # Открываем файл на запись
-            while True:                              # Уходим в вечный цикл приёма
-                data = ser.readline()                # Читаем строку из эфира и записываем в переменную
-                if data == b'EOF':                   # Если получили EOF, то возвращаем ИСТИНУ (т.к. приём файл прошёл успешно)
+        with open("sound.gpg", "wb") as file:        # open file in bin read mode
+            while True:                              # endless loop for recieve
+                data = ser.readline()                # read string from the air
+                if data == b'EOF':                   # if recieve EOF, return TRUE (recieving is completed)
                     return True
                     break
-                elif data != b'':                    # Если строка не пустая и не равна EOF, то пишем эту строку в файл
+                elif data != b'':                    # if string not EOF and not NULL, write this string into file
                     print("I recieved -> ", data)
                     file.write(data)
-                else:                                # Иначе (строка пустая) возвращаем ЛОЖЬ (т.к. мы ничего не приняли)
+                else:                                # else (if NULL) return FALSE (because recieving isn't started)
                     return False
                     break
                   
     notify("READY=1") # notifying systemd READY status
     # main loop
     while True:
-        if button.is_pressed(data[5]):
+        if pin.is_pressed(data[5]):
             
             if stop_var == False and send == False:
                 print("Pressed!")
@@ -79,7 +86,7 @@ else:
             else:
                 pass
             
-        if not(button.is_pressed(data[5])) and send == True:
+        if not(pin.is_pressed(data[5])) and send == True:
             print("Button not pressed! Sending...!")
             os.system("killall -s 9 arecord")    # stop recording
             os.system(f"c2enc {data[9]} record.raw record.bin") # use codec2 to encode
@@ -92,7 +99,7 @@ else:
             send = False             # change flags
             stop_var = False         
             
-        if not(button.is_pressed(data[5])) and send == False:
+        if not(pin.is_pressed(data[5])) and send == False:
             if not(recieve_file()):  # if there is nothing on air then skip this part
                 pass
             else:                    # listen data
