@@ -1,16 +1,28 @@
 #!/bin/python3
 
-import time
-import serial
-import pin
-import os
-import subprocess
-from systemd.daemon import notify
+try:
+    import time
+    import serial
+    import pin
+    import os
+    import subprocess
+    from systemd.daemon import notify
+except:
+    # error init libs
+    pin.power_off(data[6])
+    time.sleep(1)
+    for _ in range(5):
+        pin.power_on(data[6])
+        time.sleep(0.5)    
+        pin.power_off(data[6])
+        time.sleep(0.5)
+    time.sleep(5)
+    exit()
 
 stop_var = False     # button flag
 send = False         # status of sending
 
-# Read config
+# read config
 try:
     file = open("config", "r")
     data = file.readlines()
@@ -30,12 +42,13 @@ except:
     # config error
     pin.power_off(data[6])
     time.sleep(1)
-    for _ in range(5):
+    for _ in range(3):
         pin.power_on(data[6])
         time.sleep(0.5)    
         pin.power_off(data[6])
         time.sleep(0.5)
-    
+    time.sleep(5)
+    exit()
     
 else:
     # initialize serial
