@@ -13,8 +13,9 @@ speaker = "plughw:CARD=Device,DEV=0"
 mic = "plughw:CARD=Device,DEV=0" 
 codec2 = 3200
 alsa_args = "-f S16_LE -r 48000"
+key = 'qwerty0000'
 
-elements = [speed, port, parity, stopbits, bytesize, button, led, speaker, mic, codec2, alsa_args]
+elements = [speed, port, parity, stopbits, bytesize, button, led, speaker, mic, codec2, alsa_args, key]
 try:
     file = open("config", "r")
     data = file.readlines()
@@ -32,7 +33,7 @@ try:
 
 except:
     file = open("config", "w")               
-    data = [speed, port, parity, stopbits, bytesize, button, led, speaker, mic, codec2, alsa_args] 
+    data = [speed, port, parity, stopbits, bytesize, button, led, speaker, mic, codec2, alsa_args, key] 
     for element in data:
         file.write(str(element))
         file.write("\n")
@@ -65,10 +66,14 @@ while True:
     9. PCM of Microphone By Name(ALSA)
     10. Codec2 bitrate
     11. Arguments for alsa when recording/playback
+    
+    ------- SECURITY -------
+    12. Encryption Key
 
     ------ FUNCTIONS ------
-    12. SAVE CHANGES
-    13. EXIT
+    13. Update Software
+    14. SAVE CHANGES
+    15. EXIT
     """)
     inp = input(">>> ")
     
@@ -297,6 +302,28 @@ while True:
             os.system("clear")
     
     if inp == "12":
+        os.system("clear")
+        print("Encryption Key")
+        print("-" * 20)
+        print("""ATTENTION! If the encryption key is too complex, 
+the data transmission time will be increased. 
+At the same time, a simple key exposes your data to hacking.""")
+        print("-" * 20)
+        print("NOW -> {}".format(data[11]))
+        key_inp = input("""Enter a new value(encryption key) or enter "cancel" to cancel >>> """)
+        if key_inp == "cancel":
+            os.system("clear")
+        else:
+            data[11] = key_inp
+            print("\nSUCCESS! Press Enter to continue")
+            input()
+            os.system("clear")
+        
+    if inp == "13":
+        # UPDATE SOFTWARE
+        pass
+    
+    if inp == "14":
         file = open("config", "w")
         for element in data:
             file.write(str(element))
@@ -305,7 +332,7 @@ while True:
         print("SUCCESS! Press Enter to continue...")
         input()
         
-    if inp == "13":
+    if inp == "15":
         os.system("clear")
         print("Goodbye!")
         exit()
