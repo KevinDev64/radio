@@ -1,6 +1,18 @@
 #!/bin/python3
 import serial
 import os
+import socket
+
+remote_net_check = "github.com"
+def is_connected(hostname):
+  try:
+    host = socket.gethostbyname(hostname)
+    s = socket.create_connection((host, 443), 2)
+    s.close()
+    return True
+  except Exception:
+     pass
+  return False
 
 os.system("clear")
 
@@ -329,8 +341,13 @@ At the same time, a simple key exposes your data to hacking.""")
         update_inp = input("\nAre you sure? (y/n) >> ")
         if update_inp == "y":
             os.system("clear")
-            print("UPDATING...")  # skeleton
-            input()
+            print("\nChecking if there is an Internet connection...")
+            if is_connected(remote_net_check):
+                print("There is a connection, the update is in progress, \nwait for it to complete, do not turn off the power of the device")
+                os.system("git fetch && git pull") # add systemctl stop + start!!!
+                input("Done! Press Enter to continue...")
+            else:
+                print("No internet connection, update cancelled. Press Enter to return to main menu")
         if update_inp == "n":
             os.system("clear")
     
