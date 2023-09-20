@@ -343,11 +343,11 @@ At the same time, a simple key exposes your data to hacking.""")
             os.system("clear")
             print("\nChecking if there is an Internet connection...")
             if is_connected(remote_net_check):
-                print("There is a connection, the update is in progress, \nwait for it to complete, do not turn off the power of the device")
+                print("Internet connection is stable, the update is in progress, \nwait for it to complete, do not turn off the power of the device")
                 os.system("git fetch && git pull") # add systemctl stop + start!!!
                 input("Done! Press Enter to continue...")
             else:
-                print("No internet connection, update cancelled. Press Enter to return to main menu")
+                print("No Internet connection, update cancelled. Press Enter to return to main menu")
         if update_inp == "n":
             os.system("clear")
     
