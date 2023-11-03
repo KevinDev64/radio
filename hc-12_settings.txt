@@ -1,0 +1,6 @@
+# Configuration of HC-12 for First Model
+
+B 38400
+RC 050
+RP +20dBm (MAX)
+FU 3
